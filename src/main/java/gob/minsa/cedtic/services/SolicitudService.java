@@ -7,7 +7,6 @@ import gob.minsa.cedtic.models.ClasificacionEquipo;
 import gob.minsa.cedtic.models.DetalleSolicitud;
 import gob.minsa.cedtic.models.Solicitud;
 import gob.minsa.cedtic.repositories.ClasificacionEquipoJpaRepository;
-import gob.minsa.cedtic.repositories.DetalleSolicitudJpaRepository;
 import gob.minsa.cedtic.repositories.SolicitudJpaRepository;
 
 @Service
@@ -15,14 +14,11 @@ public class SolicitudService {
 
     private SolicitudJpaRepository solicitudJpaRepository;
     private ClasificacionEquipoJpaRepository clasificacionEquipoJpaRepository;
-    private DetalleSolicitudJpaRepository detalleSolicitudJpaRepository;
 
     public SolicitudService(SolicitudJpaRepository solicitudJpaRepository,
-        ClasificacionEquipoJpaRepository clasificacionEquipoJpaRepository,
-        DetalleSolicitudJpaRepository detalleSolicitudJpaRepository) {
+        ClasificacionEquipoJpaRepository clasificacionEquipoJpaRepository) {
         this.solicitudJpaRepository = solicitudJpaRepository;
         this.clasificacionEquipoJpaRepository = clasificacionEquipoJpaRepository;
-        this.detalleSolicitudJpaRepository = detalleSolicitudJpaRepository;
     }
     
     public Iterable<Solicitud> getAll() {
@@ -45,8 +41,6 @@ public class SolicitudService {
             newDetalle.setCantidadAprobada(detalle.cantidadAprobada());
             newDetalle.setCantidadSolicitada(detalle.cantidadSolicitada());
             newDetalle.setClasificacionEquipo(clasificacionEquipo);
-
-            newDetalle = detalleSolicitudJpaRepository.save(newDetalle);
 
             newSolicitud.getDetalleSolicitud().add(newDetalle);
         });

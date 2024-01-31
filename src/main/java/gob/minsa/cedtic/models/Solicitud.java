@@ -3,6 +3,7 @@ package gob.minsa.cedtic.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +17,8 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    @JoinColumn(name = "solicitud_id", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "solicitud_id", nullable = false, referencedColumnName = "id")
     private List<DetalleSolicitud> detalleSolicitud = new ArrayList<>();
 
     public Long getId() {
