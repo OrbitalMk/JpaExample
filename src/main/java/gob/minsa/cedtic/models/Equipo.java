@@ -1,5 +1,8 @@
 package gob.minsa.cedtic.models;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
+@SQLDelete(sql = "UPDATE Equipo SET deleted = true WHERE id=?")
+@SQLRestriction("deleted=false")
 public class Equipo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +26,8 @@ public class Equipo {
 
     @ManyToOne
     private ClasificacionEquipo clasificacionEquipo;
+
+    private boolean deleted = false;
 
     public Long getId() {
         return id;
@@ -60,5 +67,9 @@ public class Equipo {
 
     public void setClasificacionEquipo(ClasificacionEquipo clasificacionEquipo) {
         this.clasificacionEquipo = clasificacionEquipo;
+    }
+
+    public boolean getDeleted() {
+        return deleted;
     }
 }

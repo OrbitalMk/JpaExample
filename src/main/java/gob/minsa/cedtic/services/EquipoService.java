@@ -45,4 +45,10 @@ public class EquipoService {
 
         return equipoJpaRepository.save(newEquipo);
     }
+
+    public void delete(Long id) {
+        var equipoToDelete = equipoJpaRepository.findById(id).orElse(null);
+
+        equipoJpaRepository.delete(equipoToDelete);
+    }
 }
