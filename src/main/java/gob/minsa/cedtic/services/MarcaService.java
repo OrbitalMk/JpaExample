@@ -3,6 +3,7 @@ package gob.minsa.cedtic.services;
 import org.springframework.stereotype.Service;
 
 import gob.minsa.cedtic.dtos.request.MarcaRequestDto;
+import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.Marca;
 import gob.minsa.cedtic.repositories.MarcaJpaRepository;
 
@@ -20,7 +21,9 @@ public class MarcaService {
     }
 
     public Marca getById(Long id) {
-        return marcaJpaRepository.findById(id).orElse(null);
+        return marcaJpaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Marca #%d no encontrada".formatted(id)));
     }
 
     public Marca create(MarcaRequestDto marca) {

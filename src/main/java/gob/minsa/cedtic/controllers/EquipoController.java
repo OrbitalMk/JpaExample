@@ -32,6 +32,12 @@ public class EquipoController {
         return ResponseEntity.ok(equipos);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<Equipo> show(@PathVariable Long id) {
+        var equipo = equipoService.getById(id);
+        return ResponseEntity.ok(equipo);
+    }
+
     @PostMapping
     public ResponseEntity<Equipo> store(@RequestBody EquipoRequestDto equipo, UriComponentsBuilder ucb) {
         var newEquipo = equipoService.create(equipo);

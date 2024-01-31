@@ -3,6 +3,7 @@ package gob.minsa.cedtic.services;
 import org.springframework.stereotype.Service;
 
 import gob.minsa.cedtic.dtos.request.EquipoRequestDto;
+import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.ClasificacionEquipo;
 import gob.minsa.cedtic.models.Equipo;
 import gob.minsa.cedtic.models.Marca;
@@ -30,7 +31,8 @@ public class EquipoService {
     }
 
     public Equipo getById(Long id) {
-        return equipoJpaRepository.findById(id).orElse(null);
+        return equipoJpaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Equipo #%d no encontrado".formatted(id)));
     }
 
     public Equipo create(EquipoRequestDto equipo) {

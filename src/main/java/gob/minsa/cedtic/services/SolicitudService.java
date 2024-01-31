@@ -3,6 +3,7 @@ package gob.minsa.cedtic.services;
 import org.springframework.stereotype.Service;
 
 import gob.minsa.cedtic.dtos.request.SolicitudRequestDto;
+import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.ClasificacionEquipo;
 import gob.minsa.cedtic.models.DetalleSolicitud;
 import gob.minsa.cedtic.models.Solicitud;
@@ -26,7 +27,9 @@ public class SolicitudService {
     }
 
     public Solicitud getById(Long id) {
-        return solicitudJpaRepository.findById(id).orElse(null);
+        return solicitudJpaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Solicitud #%d no encontrada".formatted(id)));
     }
 
     public Solicitud create(SolicitudRequestDto solicitud) {
