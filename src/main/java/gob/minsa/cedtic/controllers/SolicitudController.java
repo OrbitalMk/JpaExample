@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import gob.minsa.cedtic.dtos.request.SolicitudRequestDto;
+import gob.minsa.cedtic.dtos.response.DisponibilidadResponseDto;
 import gob.minsa.cedtic.models.Solicitud;
 import gob.minsa.cedtic.services.SolicitudService;
 
@@ -44,5 +45,11 @@ public class SolicitudController {
             .buildAndExpand(newMarca.getId()).toUri();
 
         return ResponseEntity.created(uri).body(newMarca);
+    }
+
+    @GetMapping("disponibilidad/{id}")
+    public ResponseEntity<Iterable<DisponibilidadResponseDto>> disponibilidad(@PathVariable Long id) {
+        var disponibilidad = solicitudService.verificarDisponibilidad(id);
+        return ResponseEntity.ok(disponibilidad);
     }
 }

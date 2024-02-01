@@ -1,15 +1,21 @@
 package gob.minsa.cedtic.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import gob.minsa.cedtic.dtos.request.SolicitudRequestDto;
+import gob.minsa.cedtic.dtos.response.DisponibilidadResponseDto;
 import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.ClasificacionEquipo;
 import gob.minsa.cedtic.models.DetalleSolicitud;
+import gob.minsa.cedtic.models.Movimiento;
 import gob.minsa.cedtic.models.Proceso;
 import gob.minsa.cedtic.models.Solicitud;
 import gob.minsa.cedtic.models.Unidad;
 import gob.minsa.cedtic.repositories.ClasificacionEquipoJpaRepository;
+import gob.minsa.cedtic.repositories.MovimientoJpaRepository;
 import gob.minsa.cedtic.repositories.ProcesoJpaRepository;
 import gob.minsa.cedtic.repositories.SolicitudJpaRepository;
 import gob.minsa.cedtic.repositories.UnidadJpaRepository;
@@ -21,15 +27,18 @@ public class SolicitudService {
     private ClasificacionEquipoJpaRepository clasificacionEquipoJpaRepository;
     private UnidadJpaRepository unidadJpaRepository;
     private ProcesoJpaRepository procesoJpaRepository;
+    private MovimientoJpaRepository movimientoJpaRepository;
 
     public SolicitudService(SolicitudJpaRepository solicitudJpaRepository,
         ClasificacionEquipoJpaRepository clasificacionEquipoJpaRepository,
         UnidadJpaRepository unidadJpaRepository,
-        ProcesoJpaRepository procesoJpaRepository) {
+        ProcesoJpaRepository procesoJpaRepository,
+        MovimientoJpaRepository movimientoJpaRepository) {
         this.solicitudJpaRepository = solicitudJpaRepository;
         this.clasificacionEquipoJpaRepository = clasificacionEquipoJpaRepository;
         this.unidadJpaRepository = unidadJpaRepository;
         this.procesoJpaRepository = procesoJpaRepository;
+        this.movimientoJpaRepository = movimientoJpaRepository;
     }
     
     public Iterable<Solicitud> getAll() {
@@ -68,5 +77,27 @@ public class SolicitudService {
         });
 
         return solicitudJpaRepository.save(newSolicitud);
+    }
+
+    public Iterable<DisponibilidadResponseDto> verificarDisponibilidad(Long id) {
+        // si solicitud esta atendida return BadRequest
+
+        Solicitud solicitud = solicitudJpaRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException(
+                "Solicitud #%d no encontrada".formatted(id)));
+        List<DisponibilidadResponseDto> response = new ArrayList<>();
+
+        solicitud.getDetalleSolicitud().forEach(detalle -> {
+            Long clasificacionId = detalle.getClasificacionEquipo().getId();
+            Movimiento movimiento = movimientoJpaRepository.findFirstByProcesoIdAndClasificaionEquipoId(clasificacionId)
+                .orElse(null);
+
+            boolean disponible = movimiento.getStockActual() >= detalle.getCantidadAprobada();
+            String nombre = detalle.getClasificacionEquipo().getNombre();
+
+            response.add(new DisponibilidadResponseDto(clasificacionId, nombre, disponible));
+        });
+
+        return response;
     }
 }
