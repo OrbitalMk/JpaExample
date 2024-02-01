@@ -21,6 +21,9 @@ public class Solicitud {
     @ManyToOne
     private Unidad unidad;
 
+    @ManyToOne
+    private Proceso proceso;
+
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "solicitud_id", nullable = false, referencedColumnName = "id")
     private List<DetalleSolicitud> detalleSolicitud = new ArrayList<>();
@@ -39,6 +42,14 @@ public class Solicitud {
 
     public void setUnidad(Unidad unidad) {
         this.unidad = unidad;
+    }
+
+    public Proceso getProceso() {
+        return proceso;
+    }
+
+    public void setProceso(Proceso proceso) {
+        this.proceso = proceso;
     }
 
     public List<DetalleSolicitud> getDetalleSolicitud() {
