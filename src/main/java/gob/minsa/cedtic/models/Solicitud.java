@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -16,6 +17,9 @@ public class Solicitud {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    private Unidad unidad;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "solicitud_id", nullable = false, referencedColumnName = "id")
@@ -27,6 +31,14 @@ public class Solicitud {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Unidad getUnidad() {
+        return unidad;
+    }
+
+    public void setUnidad(Unidad unidad) {
+        this.unidad = unidad;
     }
 
     public List<DetalleSolicitud> getDetalleSolicitud() {
