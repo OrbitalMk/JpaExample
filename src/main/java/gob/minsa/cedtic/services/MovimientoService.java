@@ -1,5 +1,9 @@
 package gob.minsa.cedtic.services;
 
+import java.time.LocalDateTime;
+
+import org.springframework.stereotype.Service;
+
 import gob.minsa.cedtic.dtos.request.MovimientoRequestDto;
 import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.Equipo;
@@ -9,6 +13,7 @@ import gob.minsa.cedtic.repositories.EquipoJpaRepository;
 import gob.minsa.cedtic.repositories.MovimientoJpaRepository;
 import gob.minsa.cedtic.repositories.ProcesoJpaRepository;
 
+@Service
 public class MovimientoService {
     
     private MovimientoJpaRepository movimientoJpaRepository;
@@ -47,6 +52,7 @@ public class MovimientoService {
         newMovimiento.setStockAnterior(movimiento.stockAnterior());
         newMovimiento.setProceso(proceso);
         newMovimiento.setEquipo(equipo);
+        newMovimiento.setCreatedAt(LocalDateTime.now());
 
         return movimientoJpaRepository.save(newMovimiento);
     }

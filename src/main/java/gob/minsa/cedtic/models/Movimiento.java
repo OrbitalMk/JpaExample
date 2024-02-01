@@ -1,5 +1,7 @@
 package gob.minsa.cedtic.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,6 +17,8 @@ public class Movimiento {
     private Long stockActual;
 
     private Long stockAnterior;
+
+    private LocalDateTime createdAt;
 
     @ManyToOne
     private Proceso proceso;
@@ -39,11 +43,11 @@ public class Movimiento {
     }
 
     public Long getStockAnterior() {
-        return stockActual;
+        return stockAnterior;
     }
 
-    public void setStockAnterior(Long stockActual) {
-        this.stockActual = stockActual;
+    public void setStockAnterior(Long stockAnterior) {
+        this.stockAnterior = stockAnterior;
     }
 
     public Long getCantidad() {
@@ -57,6 +61,14 @@ public class Movimiento {
         return "Salida";
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Proceso getProceso() {
         return proceso;
     }
@@ -65,7 +77,7 @@ public class Movimiento {
         this.proceso = proceso;
     }
 
-    public Equipo getEquippo() {
+    public Equipo getEquipo() {
         return equipo;
     }
 
