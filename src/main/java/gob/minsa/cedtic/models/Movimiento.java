@@ -3,6 +3,7 @@ package gob.minsa.cedtic.models;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +24,7 @@ public class Movimiento {
     @ManyToOne
     private Proceso proceso;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Equipo equipo;
 
     public Long getId() {

@@ -6,10 +6,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import gob.minsa.cedtic.dtos.request.SolicitudRequestDto;
+import gob.minsa.cedtic.dtos.response.DisponibilidadEquipoResponseDto;
 import gob.minsa.cedtic.dtos.response.DisponibilidadResponseDto;
 import gob.minsa.cedtic.exceptions.ResourceNotFoundException;
 import gob.minsa.cedtic.models.ClasificacionEquipo;
 import gob.minsa.cedtic.models.DetalleSolicitud;
+import gob.minsa.cedtic.models.Equipo;
 import gob.minsa.cedtic.models.Movimiento;
 import gob.minsa.cedtic.models.Proceso;
 import gob.minsa.cedtic.models.Solicitud;
@@ -88,14 +90,25 @@ public class SolicitudService {
         List<DisponibilidadResponseDto> response = new ArrayList<>();
 
         solicitud.getDetalleSolicitud().forEach(detalle -> {
+            List<DisponibilidadEquipoResponseDto> disponibilidadEquipo = new ArrayList<>();
             Long clasificacionId = detalle.getClasificacionEquipo().getId();
-            Movimiento movimiento = movimientoJpaRepository.findFirstByProcesoIdAndClasificaionEquipoId(clasificacionId)
-                .orElse(null);
+            List<Movimiento> movimiento = movimientoJpaRepository
+                .findFirstByProcesoIdAndClasificaionEquipoId(solicitud.getProceso().getId(), clasificacionId);
 
-            boolean disponible = movimiento.getStockActual() >= detalle.getCantidadAprobada();
+            Long total = 0L;
+            for (Movimiento m : movimiento) {
+                Equipo e = m.getEquipo();
+                DisponibilidadEquipoResponseDto d = new DisponibilidadEquipoResponseDto(
+                    e.getId(), e.getDescripcion(),
+                    e.getMarca().getNombre(), e.getModelo(), m.getStockActual());
+                total += m.getStockActual();
+                disponibilidadEquipo.add(d);
+            }
+
+            boolean disponible = total >= detalle.getCantidadAprobada();
             String nombre = detalle.getClasificacionEquipo().getNombre();
 
-            response.add(new DisponibilidadResponseDto(clasificacionId, nombre, disponible));
+            response.add(new DisponibilidadResponseDto(clasificacionId, nombre, disponible, disponibilidadEquipo));
         });
 
         return response;

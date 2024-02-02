@@ -1,4 +1,7 @@
 package gob.minsa.cedtic.dtos.response;
 
-public record DisponibilidadResponseDto(Long clasificacionEquipoId, String equipo, boolean disponible) {
+import java.util.List;
+
+public record DisponibilidadResponseDto(Long clasificacionEquipoId, String clasificacionEquipo,
+    boolean disponible, List<DisponibilidadEquipoResponseDto> equipo) {
 }

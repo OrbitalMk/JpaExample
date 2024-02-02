@@ -52,4 +52,9 @@ public class SolicitudController {
         var disponibilidad = solicitudService.verificarDisponibilidad(id);
         return ResponseEntity.ok(disponibilidad);
     }
+
+    @PostMapping("atender/{id}")
+    public ResponseEntity<?> atender(@PathVariable Long id) {
+        return ResponseEntity.noContent().build();
+    }
 }
