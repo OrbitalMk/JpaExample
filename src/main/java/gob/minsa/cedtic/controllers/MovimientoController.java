@@ -3,6 +3,7 @@ package gob.minsa.cedtic.controllers;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,12 @@ public class MovimientoController {
 
     public MovimientoController(MovimientoService movimientoService) {
         this.movimientoService = movimientoService;
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Movimiento>> all() {
+        var movimientos = movimientoService.getAll();
+        return ResponseEntity.ok(movimientos);
     }
 
     @PostMapping

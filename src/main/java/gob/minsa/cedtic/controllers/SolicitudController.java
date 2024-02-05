@@ -1,6 +1,7 @@
 package gob.minsa.cedtic.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import gob.minsa.cedtic.dtos.request.AtenderSolicitudRequestDto;
 import gob.minsa.cedtic.dtos.request.SolicitudRequestDto;
 import gob.minsa.cedtic.dtos.response.DisponibilidadResponseDto;
 import gob.minsa.cedtic.models.Solicitud;
@@ -54,7 +56,8 @@ public class SolicitudController {
     }
 
     @PostMapping("atender/{id}")
-    public ResponseEntity<?> atender(@PathVariable Long id) {
+    public ResponseEntity<?> atender(@PathVariable Long id, @RequestBody List<AtenderSolicitudRequestDto> atender) {
+        solicitudService.atenderSolicitud(id, atender);
         return ResponseEntity.noContent().build();
     }
 }

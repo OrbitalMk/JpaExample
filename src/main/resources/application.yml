@@ -13,8 +13,15 @@ spring:
       resourceserver:
         jwt:
           public-key-location: classpath:authz.pub
+  datasource:
+    url: jdbc:h2:file:./demodb
   jpa:
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+      javax:
+        persistence:
+          schema-generation:
+            database:
+              action: create
